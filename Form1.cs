@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -142,6 +143,8 @@ namespace MusicBeePlugin
         private Plugin.MusicBeeApiInterface mbApi;
         private Dictionary<String, String> pl;
         private string np;
+        private string npName;
+        private bool suppressCheckedChanged = false;
 
         private Plugin.PlayState GetPlayerState()
         {
@@ -151,18 +154,33 @@ namespace MusicBeePlugin
         public void TrackChanged(string filename)
         {
             np = filename;
+            npName = mbApi.NowPlaying_GetFileTag(Plugin.MetaDataType.TrackTitle);
+            ChangeStuff();
+        }
+
+        delegate void ChangeStuffCallback();
+        private void ChangeStuff()
+        {
+            if (this.songTitleLabel1.InvokeRequired)
+            {
+                ChangeStuffCallback d = new ChangeStuffCallback(ChangeStuff);
+                this.Invoke(d);
+                return;
+            }
+            songTitleLabel1.Text = npName;
+            songTitleLabel3.Text = npName;
             SetSelectedPlaylists();
+            SetRatingPage();
         }
 
         delegate void SetSelectedPlaylistsCallback();
-
         private void SetSelectedPlaylists()
         {
             if (this.checkedPlayListBox.InvokeRequired)
             {
                 SetSelectedPlaylistsCallback d = new SetSelectedPlaylistsCallback(SetSelectedPlaylists);
                 this.Invoke(d);
-            } 
+            }
             else
             {
                 for (int i = 0; i < pl.Count; i++)
@@ -180,9 +198,88 @@ namespace MusicBeePlugin
             }
         }
 
-        private void ratingBar1_ValueChanged(object sender, EventArgs e)
+        delegate void SetRatingPageCallback();
+        private void SetRatingPage()
         {
-            _ = mbApi.Library_SetFileTag(np, Plugin.MetaDataType.Rating, (ratingBar1.Value / 2).ToString());
+            if (this.ratingBar1.InvokeRequired)
+            {
+                SetRatingPageCallback d = new SetRatingPageCallback(SetRatingPage);
+                this.Invoke(d);
+                return;
+            }
+
+            mbApi.Library_GetFileTags(np,
+                new Plugin.MetaDataType[] { Plugin.MetaDataType.Rating, Plugin.MetaDataType.RatingLove },
+                out string[] tags);
+            this.noRatingLabel.Text = tags[0];
+            this.loveLabel.Text = tags[1];
+            //SetRatingLabel(tags[0]);
+            //SetLoveLabel(tags[1]);
+            suppressCheckedChanged = true;
+            // now setting the actual controls
+            if (tags[0] == "")
+            {
+                // Set no rating
+                // Set scroll bar to 0
+                noRatingCheckBox.Checked = true;
+                ratingBar1.Value = 0;
+            } else
+            {
+                // parse value
+                // Set no rating to unchecked
+                // Set scroll bar to value
+                int rating = (int)float.Parse(tags[0]) * 2;
+                ratingBar1.Value = rating;
+                noRatingCheckBox.Checked = false;
+            }
+            if (tags[1] == "L")
+            {
+                // Set love check
+                loveCheckBox.Checked = true;
+            } else
+            {
+                // Set love uncheck
+                loveCheckBox.Checked = false;
+            }
+            suppressCheckedChanged = false;
+        }
+
+        private void ratingBar1_Scroll(object sender, EventArgs e)
+        {
+            // only when manually changed
+            mbApi.Library_SetFileTag(np, Plugin.MetaDataType.Rating, (ratingBar1.Value / 2).ToString());
+
+        }
+
+        private void noRatingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (suppressCheckedChanged) return;
+            // set ratingBar to 0
+            // set rating to ""
+            if (noRatingCheckBox.Checked)
+            {
+                ratingBar1.Value = 0;
+                mbApi.Library_SetFileTag(np, Plugin.MetaDataType.Rating, "");
+            }
+            else
+            {
+                // TODO: Check this
+                mbApi.Library_SetFileTag(np, Plugin.MetaDataType.Rating, "0");
+            }
+        }
+
+        private void loveCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (suppressCheckedChanged) return;
+            // just change love state
+            if (loveCheckBox.Checked)
+            {
+                mbApi.Library_SetFileTag(np, Plugin.MetaDataType.RatingLove, "L");
+            }
+            else
+            {
+                mbApi.Library_SetFileTag(np, Plugin.MetaDataType.RatingLove, "");
+            }
         }
     }
 }
