@@ -248,7 +248,7 @@ namespace MusicBeePlugin
         {
             // only when manually changed
             mbApi.Library_SetFileTag(np, Plugin.MetaDataType.Rating, (ratingBar1.Value / 2).ToString());
-
+            
         }
 
         private void noRatingCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -268,6 +268,12 @@ namespace MusicBeePlugin
             }
         }
 
+        public void Command1(object sender, EventArgs e)
+        {
+            stateLabel.Text = sum.ToString();
+            sum++;
+        }
+
         private void loveCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (suppressCheckedChanged) return;
@@ -281,5 +287,21 @@ namespace MusicBeePlugin
                 mbApi.Library_SetFileTag(np, Plugin.MetaDataType.RatingLove, "");
             }
         }
+
+        // https://getmusicbee.com/forum/index.php?topic=11492.0
+        //House
+        //Drum & Bass
+        //Electro House
+        //Bass House
+        //Deep House
+        //Techno
+        //Tech House
+        //Trap
+        //Melodic House
+        //Dance
+        //Pop
+        //R&B
+        //Rap
+
     }
 }

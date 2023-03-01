@@ -29,8 +29,9 @@ namespace MusicBeePlugin
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = (ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents);
             about.ConfigurationPanelHeight = 0;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
-            createMenuItem();
             this.pluginForm = new Form1(this.mbApiInterface);
+            createMenuItem();
+            createCommands();
             return about;
         }
 
@@ -107,6 +108,8 @@ namespace MusicBeePlugin
 
         }
 
+        
+
         private void menuClicked(object sender, EventArgs e)
         {
             this.pluginForm.Show();
@@ -117,6 +120,82 @@ namespace MusicBeePlugin
             return mbApiInterface.Player_GetPlayState();
         }
 
+
+        private int CommandLayer = 0;
+        private const int numLayers = 4;
+        private const int numCommands = 10;
+        private void createCommands()
+        {
+            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 1", this.pluginForm.Command1);
+            mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Change Layer Up", this.ChangeCommandLayerUp);
+            mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Change Layer Down", this.ChangeCommandLayerDown);
+
+            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 2", new EventHandler((sender, e) => DoCommand(2)));
+            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 3", new EventHandler((sender, e) => DoCommand(3)));
+            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 4", new EventHandler((sender, e) => DoCommand(4)));
+            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 5", new EventHandler((sender, e) => DoCommand(5)));
+            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 6", new EventHandler((sender, e) => DoCommand(6)));
+            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 7", new EventHandler((sender, e) => DoCommand(7)));
+
+            for (int i = 1; i <= numCommands; i++)
+            {
+                mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command " + i.ToString(), 
+                                                  new EventHandler((sender, e) => DoCommand(i-1)));
+            }
+        }
+
+        private void ChangeCommandLayerUp(object sender, EventArgs e)
+        {
+            CommandLayer++;
+            CommandLayer %= numLayers;
+        }
+
+        private void ChangeCommandLayerDown(object sender, EventArgs e)
+        {
+            CommandLayer--;
+            CommandLayer += numLayers; // to make the mod positive
+            CommandLayer %= numLayers;
+        }
+
+        private void DoCommand(int commandNum)
+        {
+            switch (CommandLayer)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break; 
+                case 2: 
+                    break; 
+                case 3: 
+                    break;
+            }
+        }
+
+        private string[] playlistList = new string[numCommands];
+        private string[] genreList = new string[numCommands];
+
+        private void AddToPlaylist(int commandNum)
+        {
+            //playlistUrl = playlistList[commandNum]
+            string np = mbApiInterface.NowPlaying_GetFileUrl();
+            if (!mbApiInterface.Playlist_IsInList(playlistList[commandNum], np))
+            {
+                mbApiInterface.Playlist_AppendFiles(playlistList[commandNum], new string[] { np });
+            }
+            // figure out something for removing files maybe??
+
+        }
+
+        private void AddGenre(int commandNum)
+        {
+
+        }
+
+        private void SetRating(int commandNum)
+        {
+
+        }
 
         // return an array of lyric or artwork provider names this plugin supports
         // the providers will be iterated through one by one and passed to the RetrieveLyrics/ RetrieveArtwork function in order set by the user in the MusicBee Tags(2) preferences screen until a match is found
