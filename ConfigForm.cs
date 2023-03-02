@@ -15,7 +15,10 @@ namespace MusicBeePlugin
     {
         private ComboBox[] playlistBoxes;
         private ComboBox[] genreBoxes;
-        public ConfigForm(string[] playlists, string[] genres, int[] selectedPlaylists, int[] selectedGenres)
+        private Plugin parent;
+        private string[] playlists;
+        private string[] genres;
+        public ConfigForm(string[] playlists, string[] genres, string[] selectedPlaylists, string[] selectedGenres, Plugin parent)
         {
             InitializeComponent();
             playlistBoxes = new ComboBox[]
@@ -34,29 +37,39 @@ namespace MusicBeePlugin
                 genreBox10
             };
 
+            this.playlists = playlists; this.genres = genres;
             // give all playlists and genres
             // apply selected playlists and genres
             for (int i = 0; i < 10;  i++)
             {
                 playlistBoxes[i].Items.AddRange(playlists);
-                playlistBoxes[i].SelectedIndex = selectedPlaylists[i];
+                playlistBoxes[i].SelectedIndex = numInPlaylists(selectedPlaylists[i]);
                 playlistBoxes[i].SelectedIndexChanged += new EventHandler((sender, e) => 
                                                           PlaylistBox_SelectedIndexChanged(sender, e, i));
 
                 genreBoxes[i].Items.AddRange(genres);
-                genreBoxes[i].SelectedIndex = selectedGenres[i];
-
-                playlistBoxes[i].SelectedIndexChanged += new EventHandler((sender, e) =>
+                genreBoxes[i].SelectedIndex = numInGenres(selectedGenres[i]);
+                genreBoxes[i].SelectedIndexChanged += new EventHandler((sender, e) =>
                                                           GenreBox_SelectedIndexChanged(sender, e, i));
 
             }
-
+            this.parent = parent;
 
         }
+
+        private int numInList(string s, string[] strings)
+        {
+            return 0;
+        }
+
+        private int numInPlaylists(string s) { return numInList(s, playlists);}
+
+        private int numInGenres(string s) { return numInList(s, genres);}
 
         private void PlaylistBox_SelectedIndexChanged(object sender, EventArgs e, int num)
         {
             // update config in main
+
         }
         private void GenreBox_SelectedIndexChanged(object sender, EventArgs e, int num)
         {

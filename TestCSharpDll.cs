@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Threading;
+using System.Diagnostics.Eventing.Reader;
 
 namespace MusicBeePlugin
 {
@@ -22,14 +23,15 @@ namespace MusicBeePlugin
             about.Author = "LochTech";
             about.TargetApplication = "";   //  the name of a Plugin Storage device or panel header for a dockable panel
             about.Type = PluginType.General;
-            about.VersionMajor = 1;  // your plugin version
-            about.VersionMinor = 0;
+            about.VersionMajor = 0;  // your plugin version
+            about.VersionMinor = 2;
             about.Revision = 1;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = (ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents);
-            about.ConfigurationPanelHeight = 0;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
+            about.ConfigurationPanelHeight = 200;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
             this.pluginForm = new Form1(this.mbApiInterface);
+            this.configForm = new ConfigForm(playlistList, genreList, currPlaylists, currGenres, this);
             createMenuItem();
             createCommands();
             return about;
@@ -84,7 +86,7 @@ namespace MusicBeePlugin
                 case NotificationType.PluginStartup:
                     // perform startup initialisation
                     GetSavedSettings();
-                    GetCurrentLists();
+                    GetAllPlaylists();
 
 
                     switch (mbApiInterface.Player_GetPlayState())
@@ -129,6 +131,7 @@ namespace MusicBeePlugin
         private int CommandLayer = 0;
         private const int numLayers = 4;
         private const int numCommands = 10;
+        private string np = "";
         private void createCommands()
         {
             //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 1", this.pluginForm.Command1);
@@ -164,30 +167,40 @@ namespace MusicBeePlugin
 
         private void DoCommand(int commandNum)
         {
+            // Do something to make sure np is something
+            np = mbApiInterface.NowPlaying_GetFileUrl();
+            if (np == null || np == "") return; 
+
             switch (CommandLayer)
             {
-                case 0:
+                case 0: // playlists
+                    AddToPlaylist(commandNum);
                     break;
-                case 1:
+                case 1: // genres
+                    AddGenre(commandNum);
                     break; 
-                case 2: 
+                case 2: // tags
+                    AddTag(commandNum);
                     break; 
-                case 3: 
+                case 3: // rating
+                    SetRating(commandNum);
                     break;
             }
         }
 
         private string[] playlistList;
-        private string[] currGenre = new string[numCommands];
+        private string[] genreList;
+        private string[] currTags = new string[numCommands];
         private string[] currPlaylists = new string[numCommands];
+        private string[] currGenres = new string[numCommands];
         private void GetSavedSettings()
         {
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
             Console.WriteLine(dataPath);
-
+            // open file into currPlaylists and currGenre
         }
 
-        private void GetCurrentLists()
+        private void GetAllPlaylists()
         {
             // list all playlists
             mbApiInterface.Playlist_QueryPlaylists();
@@ -204,26 +217,73 @@ namespace MusicBeePlugin
 
         }
 
+        public void SetCurrentPlaylist(string[] list)
+        {
+            currPlaylists = list;
+        }
+
+        public void SetCurrentGenres(string[] list)
+        {
+            currGenres = list;
+        }
+
+        public void SetSingleGenre(int commandNum, int i)
+        {
+            currPlaylists[commandNum] = playlistList[i];
+        }
+
+        public void SetSinglePlaylist(int commandNum, int i)
+        {
+            currGenres[commandNum] = genreList[i];
+        }
+
         private void AddToPlaylist(int commandNum)
         {
             //playlistUrl = playlistList[commandNum]
-            string np = mbApiInterface.NowPlaying_GetFileUrl();
             if (!mbApiInterface.Playlist_IsInList(currPlaylists[commandNum], np))
             {
                 mbApiInterface.Playlist_AppendFiles(currPlaylists[commandNum], new string[] { np });
             }
-            // figure out something for removing files maybe??
+            // figure out something for removing from playlist maybe??
 
         }
 
         private void AddGenre(int commandNum)
         {
+            mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Genre, currGenres[commandNum]);
+        }
+
+        private void AddTag(int commandNum)
+        {
+            // What is this meant to 
+            // Append to comment if it isn't already there
+            string cmt = mbApiInterface.Library_GetFileTag(np, Plugin.MetaDataType.Comment);
+            string tag = currTags[commandNum];
+
+            // check if comment is empty
+            if (cmt == "")
+            {
+                mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Comment, tag);
+                return;
+            }
+
+            // check if tag is in comment
+            if (cmt.Contains(tag)) return;
+            // TODO: figure out when to remove tags
+
+            // check if last character is a space
+            // if not, add one (unless start of comment)
+            if (!cmt.EndsWith(" ")) cmt += " ";
+
+            // append tag
+            cmt += tag;
+            mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Comment, cmt);
 
         }
 
         private void SetRating(int commandNum)
         {
-
+            mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Rating, (commandNum / 2).ToString());
         }
 
         // return an array of lyric or artwork provider names this plugin supports
@@ -286,5 +346,6 @@ namespace MusicBeePlugin
         //}
 
         private Form1 pluginForm;
+        private ConfigForm configForm;
     }
 }
