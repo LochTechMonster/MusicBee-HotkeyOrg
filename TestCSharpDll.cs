@@ -83,7 +83,10 @@ namespace MusicBeePlugin
             {
                 case NotificationType.PluginStartup:
                     // perform startup initialisation
-                    
+                    GetSavedSettings();
+                    GetCurrentLists();
+
+
                     switch (mbApiInterface.Player_GetPlayState())
                     {
                         case PlayState.Playing:
@@ -100,6 +103,8 @@ namespace MusicBeePlugin
                     break;
             }
         }
+
+        
 
         private void createMenuItem() 
         {
@@ -172,16 +177,40 @@ namespace MusicBeePlugin
             }
         }
 
-        private string[] playlistList = new string[numCommands];
-        private string[] genreList = new string[numCommands];
+        private string[] playlistList;
+        private string[] currGenre = new string[numCommands];
+        private string[] currPlaylists = new string[numCommands];
+        private void GetSavedSettings()
+        {
+            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
+            Console.WriteLine(dataPath);
+
+        }
+
+        private void GetCurrentLists()
+        {
+            // list all playlists
+            mbApiInterface.Playlist_QueryPlaylists();
+            string file = "";
+            List<string> list = new List<string>();
+            file = mbApiInterface.Playlist_QueryGetNextPlaylist();
+            while (file != null)
+            {
+                list.Add(file);
+            }
+            playlistList = list.ToArray();
+
+            // list all genres???
+
+        }
 
         private void AddToPlaylist(int commandNum)
         {
             //playlistUrl = playlistList[commandNum]
             string np = mbApiInterface.NowPlaying_GetFileUrl();
-            if (!mbApiInterface.Playlist_IsInList(playlistList[commandNum], np))
+            if (!mbApiInterface.Playlist_IsInList(currPlaylists[commandNum], np))
             {
-                mbApiInterface.Playlist_AppendFiles(playlistList[commandNum], new string[] { np });
+                mbApiInterface.Playlist_AppendFiles(currPlaylists[commandNum], new string[] { np });
             }
             // figure out something for removing files maybe??
 
