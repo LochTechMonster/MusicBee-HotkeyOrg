@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics.Eventing.Reader;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace MusicBeePlugin
 {
@@ -29,8 +31,10 @@ namespace MusicBeePlugin
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = (ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents);
-            about.ConfigurationPanelHeight = 200;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
+            about.ConfigurationPanelHeight = 500;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
             this.pluginForm = new Form1(this.mbApiInterface);
+            GetSavedSettings();
+            GetAllPlaylists();
             this.configForm = new ConfigForm(playlistList, genreList, currPlaylists, currGenres, this);
             createMenuItem();
             createCommands();
@@ -64,6 +68,17 @@ namespace MusicBeePlugin
         {
             // save any persistent settings in a sub-folder of this path
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
+            Console.WriteLine(dataPath);
+            using (var stream = File.Create(dataPath + "/hotkeyOrg/currPlaylists.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(string[]));
+                serializer.Serialize(stream, currPlaylists);
+            }
+            using (var stream = File.Create(dataPath + "/hotkeyOrg/currGenres.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(string[]));
+                serializer.Serialize(stream, currGenres);
+            }
         }
 
         // MusicBee is closing the plugin (plugin is being disabled by user or MusicBee is shutting down)
@@ -85,8 +100,7 @@ namespace MusicBeePlugin
             {
                 case NotificationType.PluginStartup:
                     // perform startup initialisation
-                    GetSavedSettings();
-                    GetAllPlaylists();
+                    
 
 
                     switch (mbApiInterface.Player_GetPlayState())
@@ -197,7 +211,20 @@ namespace MusicBeePlugin
         {
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
             Console.WriteLine(dataPath);
+
             // open file into currPlaylists and currGenre
+            // check if file exists
+            using (var stream = File.Create(dataPath + "/hotkeyOrg/currPlaylists.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(string[]));
+                currPlaylists = serializer.Deserialize(stream) as string[]; // will this work?
+                //serializer.Serialize(stream, currPlaylists);
+            }
+            using (var stream = File.Create(dataPath + "/hotkeyOrg/currGenres.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(string[]));
+                currGenres = serializer.Deserialize(stream) as string[]; // TODO: really will it?
+            }
         }
 
         private void GetAllPlaylists()

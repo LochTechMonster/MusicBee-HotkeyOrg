@@ -59,7 +59,7 @@ namespace MusicBeePlugin
 
         private int numInList(string s, string[] strings)
         {
-            return 0;
+            return Array.IndexOf(strings, s);
         }
 
         private int numInPlaylists(string s) { return numInList(s, playlists);}
@@ -69,16 +69,12 @@ namespace MusicBeePlugin
         private void PlaylistBox_SelectedIndexChanged(object sender, EventArgs e, int num)
         {
             // update config in main
-
+            parent.SetSinglePlaylist(num, playlistBoxes[num].SelectedIndex);
         }
         private void GenreBox_SelectedIndexChanged(object sender, EventArgs e, int num)
         {
             // update config in main
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            parent.SetSingleGenre(num, genreBoxes[num].SelectedIndex);
         }
     }
 }

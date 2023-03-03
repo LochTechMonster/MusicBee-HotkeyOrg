@@ -30,17 +30,6 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.playlistTab = new System.Windows.Forms.TabPage();
-            this.genreTab = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.playlistBox1 = new System.Windows.Forms.ComboBox();
-            this.playlistBox2 = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.playlistBox3 = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.playlistBox5 = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.playlistBox4 = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.playlistBox10 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.playlistBox9 = new System.Windows.Forms.ComboBox();
@@ -51,6 +40,17 @@
             this.label9 = new System.Windows.Forms.Label();
             this.playlistBox6 = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.playlistBox5 = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.playlistBox4 = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.playlistBox3 = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.playlistBox2 = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.playlistBox1 = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.genreTab = new System.Windows.Forms.TabPage();
             this.genreBox10 = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.genreBox9 = new System.Windows.Forms.ComboBox();
@@ -115,122 +115,6 @@
             this.playlistTab.TabIndex = 0;
             this.playlistTab.Text = "Playlists";
             this.playlistTab.UseVisualStyleBackColor = true;
-            // 
-            // genreTab
-            // 
-            this.genreTab.Controls.Add(this.genreBox10);
-            this.genreTab.Controls.Add(this.label11);
-            this.genreTab.Controls.Add(this.genreBox9);
-            this.genreTab.Controls.Add(this.label12);
-            this.genreTab.Controls.Add(this.genreBox8);
-            this.genreTab.Controls.Add(this.label13);
-            this.genreTab.Controls.Add(this.genreBox7);
-            this.genreTab.Controls.Add(this.label14);
-            this.genreTab.Controls.Add(this.genreBox6);
-            this.genreTab.Controls.Add(this.label15);
-            this.genreTab.Controls.Add(this.genreBox5);
-            this.genreTab.Controls.Add(this.label16);
-            this.genreTab.Controls.Add(this.genreBox4);
-            this.genreTab.Controls.Add(this.label17);
-            this.genreTab.Controls.Add(this.genreBox3);
-            this.genreTab.Controls.Add(this.label18);
-            this.genreTab.Controls.Add(this.genreBox2);
-            this.genreTab.Controls.Add(this.label19);
-            this.genreTab.Controls.Add(this.genreBox1);
-            this.genreTab.Controls.Add(this.label20);
-            this.genreTab.Location = new System.Drawing.Point(4, 22);
-            this.genreTab.Name = "genreTab";
-            this.genreTab.Padding = new System.Windows.Forms.Padding(3);
-            this.genreTab.Size = new System.Drawing.Size(486, 221);
-            this.genreTab.TabIndex = 1;
-            this.genreTab.Text = "Genres";
-            this.genreTab.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(37, 44);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Playlist 1";
-            // 
-            // playlistBox1
-            // 
-            this.playlistBox1.FormattingEnabled = true;
-            this.playlistBox1.Location = new System.Drawing.Point(102, 41);
-            this.playlistBox1.Name = "playlistBox1";
-            this.playlistBox1.Size = new System.Drawing.Size(121, 21);
-            this.playlistBox1.TabIndex = 2;
-            this.playlistBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // playlistBox2
-            // 
-            this.playlistBox2.FormattingEnabled = true;
-            this.playlistBox2.Location = new System.Drawing.Point(102, 68);
-            this.playlistBox2.Name = "playlistBox2";
-            this.playlistBox2.Size = new System.Drawing.Size(121, 21);
-            this.playlistBox2.TabIndex = 4;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(37, 71);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Playlist 2";
-            // 
-            // playlistBox3
-            // 
-            this.playlistBox3.FormattingEnabled = true;
-            this.playlistBox3.Location = new System.Drawing.Point(102, 95);
-            this.playlistBox3.Name = "playlistBox3";
-            this.playlistBox3.Size = new System.Drawing.Size(121, 21);
-            this.playlistBox3.TabIndex = 6;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(37, 98);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(48, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Playlist 3";
-            // 
-            // playlistBox5
-            // 
-            this.playlistBox5.FormattingEnabled = true;
-            this.playlistBox5.Location = new System.Drawing.Point(102, 149);
-            this.playlistBox5.Name = "playlistBox5";
-            this.playlistBox5.Size = new System.Drawing.Size(121, 21);
-            this.playlistBox5.TabIndex = 10;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(37, 152);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Playlist 5";
-            // 
-            // playlistBox4
-            // 
-            this.playlistBox4.FormattingEnabled = true;
-            this.playlistBox4.Location = new System.Drawing.Point(102, 122);
-            this.playlistBox4.Name = "playlistBox4";
-            this.playlistBox4.Size = new System.Drawing.Size(121, 21);
-            this.playlistBox4.TabIndex = 8;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(37, 125);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(48, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Playlist 4";
             // 
             // playlistBox10
             // 
@@ -316,6 +200,121 @@
             this.label10.Size = new System.Drawing.Size(48, 13);
             this.label10.TabIndex = 11;
             this.label10.Text = "Playlist 6";
+            // 
+            // playlistBox5
+            // 
+            this.playlistBox5.FormattingEnabled = true;
+            this.playlistBox5.Location = new System.Drawing.Point(102, 149);
+            this.playlistBox5.Name = "playlistBox5";
+            this.playlistBox5.Size = new System.Drawing.Size(121, 21);
+            this.playlistBox5.TabIndex = 10;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(37, 152);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(48, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Playlist 5";
+            // 
+            // playlistBox4
+            // 
+            this.playlistBox4.FormattingEnabled = true;
+            this.playlistBox4.Location = new System.Drawing.Point(102, 122);
+            this.playlistBox4.Name = "playlistBox4";
+            this.playlistBox4.Size = new System.Drawing.Size(121, 21);
+            this.playlistBox4.TabIndex = 8;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(37, 125);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(48, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Playlist 4";
+            // 
+            // playlistBox3
+            // 
+            this.playlistBox3.FormattingEnabled = true;
+            this.playlistBox3.Location = new System.Drawing.Point(102, 95);
+            this.playlistBox3.Name = "playlistBox3";
+            this.playlistBox3.Size = new System.Drawing.Size(121, 21);
+            this.playlistBox3.TabIndex = 6;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(37, 98);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(48, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Playlist 3";
+            // 
+            // playlistBox2
+            // 
+            this.playlistBox2.FormattingEnabled = true;
+            this.playlistBox2.Location = new System.Drawing.Point(102, 68);
+            this.playlistBox2.Name = "playlistBox2";
+            this.playlistBox2.Size = new System.Drawing.Size(121, 21);
+            this.playlistBox2.TabIndex = 4;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(37, 71);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(48, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Playlist 2";
+            // 
+            // playlistBox1
+            // 
+            this.playlistBox1.FormattingEnabled = true;
+            this.playlistBox1.Location = new System.Drawing.Point(102, 41);
+            this.playlistBox1.Name = "playlistBox1";
+            this.playlistBox1.Size = new System.Drawing.Size(121, 21);
+            this.playlistBox1.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(37, 44);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(48, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Playlist 1";
+            // 
+            // genreTab
+            // 
+            this.genreTab.Controls.Add(this.genreBox10);
+            this.genreTab.Controls.Add(this.label11);
+            this.genreTab.Controls.Add(this.genreBox9);
+            this.genreTab.Controls.Add(this.label12);
+            this.genreTab.Controls.Add(this.genreBox8);
+            this.genreTab.Controls.Add(this.label13);
+            this.genreTab.Controls.Add(this.genreBox7);
+            this.genreTab.Controls.Add(this.label14);
+            this.genreTab.Controls.Add(this.genreBox6);
+            this.genreTab.Controls.Add(this.label15);
+            this.genreTab.Controls.Add(this.genreBox5);
+            this.genreTab.Controls.Add(this.label16);
+            this.genreTab.Controls.Add(this.genreBox4);
+            this.genreTab.Controls.Add(this.label17);
+            this.genreTab.Controls.Add(this.genreBox3);
+            this.genreTab.Controls.Add(this.label18);
+            this.genreTab.Controls.Add(this.genreBox2);
+            this.genreTab.Controls.Add(this.label19);
+            this.genreTab.Controls.Add(this.genreBox1);
+            this.genreTab.Controls.Add(this.label20);
+            this.genreTab.Location = new System.Drawing.Point(4, 22);
+            this.genreTab.Name = "genreTab";
+            this.genreTab.Padding = new System.Windows.Forms.Padding(3);
+            this.genreTab.Size = new System.Drawing.Size(486, 221);
+            this.genreTab.TabIndex = 1;
+            this.genreTab.Text = "Genres";
+            this.genreTab.UseVisualStyleBackColor = true;
             // 
             // genreBox10
             // 
