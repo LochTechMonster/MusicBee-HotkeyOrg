@@ -14,10 +14,10 @@ namespace MusicBeePlugin
     public partial class ConfigForm : Form
     {
         private ComboBox[] playlistBoxes;
-        private ComboBox[] genreBoxes;
+        private TextBox[] genreBoxes;
         private Plugin parent;
         private string[] playlists;
-        private string[] genres;
+        private string[] selectedGenres;
         public ConfigForm(string[] playlists, string[] genres, string[] selectedPlaylists, string[] selectedGenres, Plugin parent)
         {
             InitializeComponent();
@@ -29,7 +29,7 @@ namespace MusicBeePlugin
                 playlistBox10
             };
 
-            genreBoxes = new ComboBox[]
+            genreBoxes = new TextBox[]
             {
                 genreBox1, genreBox2, genreBox3,
                 genreBox4, genreBox5, genreBox6,
@@ -37,7 +37,7 @@ namespace MusicBeePlugin
                 genreBox10
             };
 
-            this.playlists = playlists; this.genres = genres;
+            this.playlists = playlists; this.selectedGenres = selectedGenres;
             // give all playlists and genres
             // apply selected playlists and genres
             for (int i = 0; i < 10;  i++)
@@ -47,10 +47,10 @@ namespace MusicBeePlugin
                 playlistBoxes[i].SelectedIndexChanged += new EventHandler((sender, e) => 
                                                           PlaylistBox_SelectedIndexChanged(sender, e, i));
 
-                genreBoxes[i].Items.AddRange(genres);
-                genreBoxes[i].SelectedIndex = numInGenres(selectedGenres[i]);
-                genreBoxes[i].SelectedIndexChanged += new EventHandler((sender, e) =>
-                                                          GenreBox_SelectedIndexChanged(sender, e, i));
+                genreBoxes[i].Text = selectedGenres[i];
+                //genreBoxes[i].SelectedIndex = numInGenres(selectedGenres[i]);
+                genreBoxes[i].TextChanged += new EventHandler((sender, e) =>
+                                              GenreBox_TextChanged(sender, e, i));
 
             }
             this.parent = parent;
@@ -64,17 +64,36 @@ namespace MusicBeePlugin
 
         private int numInPlaylists(string s) { return numInList(s, playlists);}
 
-        private int numInGenres(string s) { return numInList(s, genres);}
+        //private int numInGenres(string s) { return numInList(s, genres);}
 
         private void PlaylistBox_SelectedIndexChanged(object sender, EventArgs e, int num)
         {
             // update config in main
             parent.SetSinglePlaylist(num, playlistBoxes[num].SelectedIndex);
         }
-        private void GenreBox_SelectedIndexChanged(object sender, EventArgs e, int num)
+        private void GenreBox_TextChanged(object sender, EventArgs e, int num)
         {
-            // update config in main
-            parent.SetSingleGenre(num, genreBoxes[num].SelectedIndex);
+            // update config in main when button is pressed
+            
+            //parent.SetSingleGenre(num, genreBoxes[num].Text);
+            //selectedGenres[num] = genreBoxes[num].Text;
+            
+        }
+
+        private void UpdateSelectedGenres()
+        {
+            // sets array from text boxes
+            for (int i = 0; i < 10; i++)
+            {
+                selectedGenres[i] = genreBoxes[i].Text;
+            }
+        }
+
+        private void genreUpdateButton_Click(object sender, EventArgs e)
+        {
+            // update all genres
+            UpdateSelectedGenres();
+            parent.SetCurrentGenres(selectedGenres);
         }
     }
 }

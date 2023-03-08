@@ -259,6 +259,11 @@ namespace MusicBeePlugin
             currPlaylists[commandNum] = playlistList[i];
         }
 
+        public void SetSingleGenre(int commandNum, string s)
+        {
+            currGenres[commandNum] = s;
+        }
+
         public void SetSinglePlaylist(int commandNum, int i)
         {
             currGenres[commandNum] = genreList[i];
