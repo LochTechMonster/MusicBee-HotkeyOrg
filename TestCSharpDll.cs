@@ -254,6 +254,11 @@ namespace MusicBeePlugin
             currGenres = list;
         }
 
+        public void SetCurrentTags(string[] list)
+        {
+            currTags = list;
+        }
+
         public void SetSingleGenre(int commandNum, int i)
         {
             currPlaylists[commandNum] = playlistList[i];
@@ -272,6 +277,7 @@ namespace MusicBeePlugin
         private void AddToPlaylist(int commandNum)
         {
             //playlistUrl = playlistList[commandNum]
+            if (currPlaylists[commandNum] == "") return;
             if (!mbApiInterface.Playlist_IsInList(currPlaylists[commandNum], np))
             {
                 mbApiInterface.Playlist_AppendFiles(currPlaylists[commandNum], new string[] { np });
@@ -282,6 +288,7 @@ namespace MusicBeePlugin
 
         private void AddGenre(int commandNum)
         {
+            if (currGenres[commandNum] == "") return;
             mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Genre, currGenres[commandNum]);
         }
 
@@ -289,6 +296,8 @@ namespace MusicBeePlugin
         {
             // What is this meant to 
             // Append to comment if it isn't already there
+            if (currTags[commandNum] == "") return;
+
             string cmt = mbApiInterface.Library_GetFileTag(np, Plugin.MetaDataType.Comment);
             string tag = currTags[commandNum];
 

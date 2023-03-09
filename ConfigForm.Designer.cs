@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.playlistTab = new System.Windows.Forms.TabPage();
             this.playlistBox10 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -51,6 +51,7 @@
             this.playlistBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.genreTab = new System.Windows.Forms.TabPage();
+            this.genreUpdateButton = new System.Windows.Forms.Button();
             this.genreBox10 = new System.Windows.Forms.TextBox();
             this.genreBox9 = new System.Windows.Forms.TextBox();
             this.genreBox8 = new System.Windows.Forms.TextBox();
@@ -71,21 +72,44 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.genreUpdateButton = new System.Windows.Forms.Button();
-            this.tabControl1.SuspendLayout();
+            this.tagsTab = new System.Windows.Forms.TabPage();
+            this.tagUpdateButton = new System.Windows.Forms.Button();
+            this.tagBox10 = new System.Windows.Forms.TextBox();
+            this.tagBox9 = new System.Windows.Forms.TextBox();
+            this.tagBox8 = new System.Windows.Forms.TextBox();
+            this.tagBox7 = new System.Windows.Forms.TextBox();
+            this.tagBox6 = new System.Windows.Forms.TextBox();
+            this.tagBox5 = new System.Windows.Forms.TextBox();
+            this.tagBox4 = new System.Windows.Forms.TextBox();
+            this.tagBox3 = new System.Windows.Forms.TextBox();
+            this.tagBox2 = new System.Windows.Forms.TextBox();
+            this.tagBox1 = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.tabControl.SuspendLayout();
             this.playlistTab.SuspendLayout();
             this.genreTab.SuspendLayout();
+            this.tagsTab.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabControl
             // 
-            this.tabControl1.Controls.Add(this.playlistTab);
-            this.tabControl1.Controls.Add(this.genreTab);
-            this.tabControl1.Location = new System.Drawing.Point(12, 12);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(494, 247);
-            this.tabControl1.TabIndex = 0;
+            this.tabControl.Controls.Add(this.playlistTab);
+            this.tabControl.Controls.Add(this.genreTab);
+            this.tabControl.Controls.Add(this.tagsTab);
+            this.tabControl.Location = new System.Drawing.Point(12, 12);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(494, 247);
+            this.tabControl.TabIndex = 0;
             // 
             // playlistTab
             // 
@@ -318,6 +342,16 @@
             this.genreTab.Text = "Genres";
             this.genreTab.UseVisualStyleBackColor = true;
             // 
+            // genreUpdateButton
+            // 
+            this.genreUpdateButton.Location = new System.Drawing.Point(335, 182);
+            this.genreUpdateButton.Name = "genreUpdateButton";
+            this.genreUpdateButton.Size = new System.Drawing.Size(94, 23);
+            this.genreUpdateButton.TabIndex = 51;
+            this.genreUpdateButton.Text = "Update Genres";
+            this.genreUpdateButton.UseVisualStyleBackColor = true;
+            this.genreUpdateButton.Click += new System.EventHandler(this.genreUpdateButton_Click);
+            // 
             // genreBox10
             // 
             this.genreBox10.Location = new System.Drawing.Point(308, 145);
@@ -478,36 +512,228 @@
             this.label20.TabIndex = 21;
             this.label20.Text = "Genre 1";
             // 
-            // genreUpdateButton
+            // tagsTab
             // 
-            this.genreUpdateButton.Location = new System.Drawing.Point(335, 182);
-            this.genreUpdateButton.Name = "genreUpdateButton";
-            this.genreUpdateButton.Size = new System.Drawing.Size(94, 23);
-            this.genreUpdateButton.TabIndex = 51;
-            this.genreUpdateButton.Text = "Update Genres";
-            this.genreUpdateButton.UseVisualStyleBackColor = true;
-            this.genreUpdateButton.Click += new System.EventHandler(this.genreUpdateButton_Click);
+            this.tagsTab.Controls.Add(this.tagUpdateButton);
+            this.tagsTab.Controls.Add(this.tagBox10);
+            this.tagsTab.Controls.Add(this.tagBox9);
+            this.tagsTab.Controls.Add(this.tagBox8);
+            this.tagsTab.Controls.Add(this.tagBox7);
+            this.tagsTab.Controls.Add(this.tagBox6);
+            this.tagsTab.Controls.Add(this.tagBox5);
+            this.tagsTab.Controls.Add(this.tagBox4);
+            this.tagsTab.Controls.Add(this.tagBox3);
+            this.tagsTab.Controls.Add(this.tagBox2);
+            this.tagsTab.Controls.Add(this.tagBox1);
+            this.tagsTab.Controls.Add(this.label21);
+            this.tagsTab.Controls.Add(this.label22);
+            this.tagsTab.Controls.Add(this.label23);
+            this.tagsTab.Controls.Add(this.label24);
+            this.tagsTab.Controls.Add(this.label25);
+            this.tagsTab.Controls.Add(this.label26);
+            this.tagsTab.Controls.Add(this.label27);
+            this.tagsTab.Controls.Add(this.label28);
+            this.tagsTab.Controls.Add(this.label29);
+            this.tagsTab.Controls.Add(this.label30);
+            this.tagsTab.Location = new System.Drawing.Point(4, 22);
+            this.tagsTab.Name = "tagsTab";
+            this.tagsTab.Size = new System.Drawing.Size(486, 221);
+            this.tagsTab.TabIndex = 2;
+            this.tagsTab.Text = "Tags";
+            this.tagsTab.UseVisualStyleBackColor = true;
+            // 
+            // tagUpdateButton
+            // 
+            this.tagUpdateButton.Location = new System.Drawing.Point(335, 182);
+            this.tagUpdateButton.Name = "tagUpdateButton";
+            this.tagUpdateButton.Size = new System.Drawing.Size(94, 23);
+            this.tagUpdateButton.TabIndex = 72;
+            this.tagUpdateButton.Text = "Update Tags";
+            this.tagUpdateButton.UseVisualStyleBackColor = true;
+            this.tagUpdateButton.Click += new System.EventHandler(this.tagUpdateButton_Click);
+            // 
+            // tagBox10
+            // 
+            this.tagBox10.Location = new System.Drawing.Point(308, 145);
+            this.tagBox10.Name = "tagBox10";
+            this.tagBox10.Size = new System.Drawing.Size(121, 20);
+            this.tagBox10.TabIndex = 71;
+            // 
+            // tagBox9
+            // 
+            this.tagBox9.Location = new System.Drawing.Point(308, 119);
+            this.tagBox9.Name = "tagBox9";
+            this.tagBox9.Size = new System.Drawing.Size(121, 20);
+            this.tagBox9.TabIndex = 70;
+            // 
+            // tagBox8
+            // 
+            this.tagBox8.Location = new System.Drawing.Point(308, 93);
+            this.tagBox8.Name = "tagBox8";
+            this.tagBox8.Size = new System.Drawing.Size(121, 20);
+            this.tagBox8.TabIndex = 69;
+            // 
+            // tagBox7
+            // 
+            this.tagBox7.Location = new System.Drawing.Point(308, 67);
+            this.tagBox7.Name = "tagBox7";
+            this.tagBox7.Size = new System.Drawing.Size(121, 20);
+            this.tagBox7.TabIndex = 68;
+            // 
+            // tagBox6
+            // 
+            this.tagBox6.Location = new System.Drawing.Point(308, 41);
+            this.tagBox6.Name = "tagBox6";
+            this.tagBox6.Size = new System.Drawing.Size(121, 20);
+            this.tagBox6.TabIndex = 67;
+            // 
+            // tagBox5
+            // 
+            this.tagBox5.Location = new System.Drawing.Point(102, 145);
+            this.tagBox5.Name = "tagBox5";
+            this.tagBox5.Size = new System.Drawing.Size(121, 20);
+            this.tagBox5.TabIndex = 66;
+            // 
+            // tagBox4
+            // 
+            this.tagBox4.Location = new System.Drawing.Point(102, 119);
+            this.tagBox4.Name = "tagBox4";
+            this.tagBox4.Size = new System.Drawing.Size(121, 20);
+            this.tagBox4.TabIndex = 65;
+            // 
+            // tagBox3
+            // 
+            this.tagBox3.Location = new System.Drawing.Point(102, 93);
+            this.tagBox3.Name = "tagBox3";
+            this.tagBox3.Size = new System.Drawing.Size(121, 20);
+            this.tagBox3.TabIndex = 64;
+            // 
+            // tagBox2
+            // 
+            this.tagBox2.Location = new System.Drawing.Point(102, 67);
+            this.tagBox2.Name = "tagBox2";
+            this.tagBox2.Size = new System.Drawing.Size(121, 20);
+            this.tagBox2.TabIndex = 63;
+            // 
+            // tagBox1
+            // 
+            this.tagBox1.Location = new System.Drawing.Point(102, 41);
+            this.tagBox1.Name = "tagBox1";
+            this.tagBox1.Size = new System.Drawing.Size(121, 20);
+            this.tagBox1.TabIndex = 62;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(251, 148);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(41, 13);
+            this.label21.TabIndex = 61;
+            this.label21.Text = "Tag 10";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(251, 122);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(35, 13);
+            this.label22.TabIndex = 60;
+            this.label22.Text = "Tag 9";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(251, 96);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(35, 13);
+            this.label23.TabIndex = 59;
+            this.label23.Text = "Tag 8";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(251, 70);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(35, 13);
+            this.label24.TabIndex = 58;
+            this.label24.Text = "Tag 7";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(251, 44);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(35, 13);
+            this.label25.TabIndex = 57;
+            this.label25.Text = "Tag 6";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(37, 148);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(35, 13);
+            this.label26.TabIndex = 56;
+            this.label26.Text = "Tag 5";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(37, 122);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(35, 13);
+            this.label27.TabIndex = 55;
+            this.label27.Text = "Tag 4";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(37, 98);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(35, 13);
+            this.label28.TabIndex = 54;
+            this.label28.Text = "Tag 3";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(37, 70);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(35, 13);
+            this.label29.TabIndex = 53;
+            this.label29.Text = "Tag 2";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(37, 44);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(35, 13);
+            this.label30.TabIndex = 52;
+            this.label30.Text = "Tag 1";
             // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(535, 286);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControl);
             this.Name = "ConfigForm";
             this.Text = "ConfigForm";
-            this.tabControl1.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
             this.playlistTab.ResumeLayout(false);
             this.playlistTab.PerformLayout();
             this.genreTab.ResumeLayout(false);
             this.genreTab.PerformLayout();
+            this.tagsTab.ResumeLayout(false);
+            this.tagsTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage playlistTab;
         private System.Windows.Forms.TabPage genreTab;
         private System.Windows.Forms.Label label1;
@@ -551,5 +777,27 @@
         private System.Windows.Forms.TextBox genreBox2;
         private System.Windows.Forms.TextBox genreBox1;
         private System.Windows.Forms.Button genreUpdateButton;
+        private System.Windows.Forms.TabPage tagsTab;
+        private System.Windows.Forms.Button tagUpdateButton;
+        private System.Windows.Forms.TextBox tagBox10;
+        private System.Windows.Forms.TextBox tagBox9;
+        private System.Windows.Forms.TextBox tagBox8;
+        private System.Windows.Forms.TextBox tagBox7;
+        private System.Windows.Forms.TextBox tagBox6;
+        private System.Windows.Forms.TextBox tagBox5;
+        private System.Windows.Forms.TextBox tagBox4;
+        private System.Windows.Forms.TextBox tagBox3;
+        private System.Windows.Forms.TextBox tagBox2;
+        private System.Windows.Forms.TextBox tagBox1;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
     }
 }
