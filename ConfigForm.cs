@@ -21,7 +21,7 @@ namespace MusicBeePlugin
         private string[] playlists;
         private string[] selectedGenres;
         private string[] selectedTags;
-        public ConfigForm(string[] playlists, string[] selectedTags, string[] selectedPlaylists, string[] selectedGenres, Plugin parent)
+        public ConfigForm(string[] playlists, string[] playlistNames, string[] selectedTags, string[] selectedPlaylists, string[] selectedGenres, Plugin parent)
         {
             InitializeComponent();
             playlistBoxes = new ComboBox[]
@@ -56,10 +56,12 @@ namespace MusicBeePlugin
             // apply selected playlists and genres
             for (int i = 0; i < 10;  i++)
             {
-                playlistBoxes[i].Items.AddRange(playlists);
+                // TODO: Sort out playlist names and playlist file
+                int a = i;
+                playlistBoxes[i].Items.AddRange(playlistNames);
                 playlistBoxes[i].SelectedIndex = numInPlaylists(selectedPlaylists[i]);
                 playlistBoxes[i].SelectedIndexChanged += new EventHandler((sender, e) => 
-                                                          PlaylistBox_SelectedIndexChanged(sender, e, i));
+                                                          PlaylistBox_SelectedIndexChanged(sender, e, a));
 
                 genreBoxes[i].Text = selectedGenres[i];
                 //genreBoxes[i].SelectedIndex = numInGenres(selectedGenres[i]);

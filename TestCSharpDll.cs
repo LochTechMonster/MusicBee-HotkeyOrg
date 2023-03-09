@@ -31,33 +31,47 @@ namespace MusicBeePlugin
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = (ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents);
-            about.ConfigurationPanelHeight = 500;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
+            about.ConfigurationPanelHeight = 25;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
             this.pluginForm = new Form1(this.mbApiInterface);
             GetSavedSettings();
             GetAllPlaylists();
-            this.configForm = new ConfigForm(playlistList, genreList, currPlaylists, currGenres, this);
             createMenuItem();
             createCommands();
             return about;
+        }
+
+        private void OpenConfigForm()
+        {
+            this.configForm = new ConfigForm(playlistList, playlistNames, currTags, currPlaylists, currGenres, this);
+            configForm.Show();
         }
 
         public bool Configure(IntPtr panelHandle)
         {
             // save any persistent settings in a sub-folder of this path
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
+
+
             // panelHandle will only be set if you set about.ConfigurationPanelHeight to a non-zero value
             // keep in mind the panel width is scaled according to the font the user has selected
             // if about.ConfigurationPanelHeight is set to 0, you can display your own popup window
             if (panelHandle != IntPtr.Zero)
             {
                 Panel configPanel = (Panel)Panel.FromHandle(panelHandle);
-                Label prompt = new Label();
-                prompt.AutoSize = true;
-                prompt.Location = new Point(0, 0);
-                prompt.Text = "prompt:";
-                TextBox textBox = new TextBox();
-                textBox.Bounds = new Rectangle(60, 0, 100, textBox.Height);
-                configPanel.Controls.AddRange(new Control[] { prompt, textBox });
+                Button button = new Button
+                {
+                    AutoSize = true,
+                    Location = new Point(0, 0),
+                    Text = "Configure"
+                };
+                // TODO: Check opening multiple
+                button.Click += new EventHandler((sender, e) => OpenConfigForm());
+                configPanel.Controls.Add(button);
+
+                //Label prompt = new Label();
+                //TextBox textBox = new TextBox();
+                //textBox.Bounds = new Rectangle(60, 0, 100, textBox.Height);
+                //configPanel.Controls.AddRange(new Control[] { prompt, textBox });
             }
             return false;
         }
@@ -69,15 +83,44 @@ namespace MusicBeePlugin
             // save any persistent settings in a sub-folder of this path
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
             Console.WriteLine(dataPath);
+            // TODO: check path exists
+            if (!Directory.Exists(dataPath + "/hotkeyOrg/"))
+            {
+                Directory.CreateDirectory(dataPath + "/hotkeyOrg/");
+            }
+
+            SavePlaylists();
+            SaveGenres();
+            SaveTags();
+        }
+
+        private void SavePlaylists()
+        {
+            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
             using (var stream = File.Create(dataPath + "/hotkeyOrg/currPlaylists.xml"))
             {
                 var serializer = new XmlSerializer(typeof(string[]));
                 serializer.Serialize(stream, currPlaylists);
             }
+        }
+
+        private void SaveGenres()
+        {
+            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
             using (var stream = File.Create(dataPath + "/hotkeyOrg/currGenres.xml"))
             {
                 var serializer = new XmlSerializer(typeof(string[]));
                 serializer.Serialize(stream, currGenres);
+            }
+        }
+
+        private void SaveTags()
+        {
+            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
+            using (var stream = File.Create(dataPath + "/hotkeyOrg/currTags.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(string[]));
+                serializer.Serialize(stream, currTags);
             }
         }
 
@@ -203,6 +246,7 @@ namespace MusicBeePlugin
         }
 
         private string[] playlistList;
+        private string[] playlistNames;
         private string[] genreList;
         private string[] currTags = new string[numCommands];
         private string[] currPlaylists = new string[numCommands];
@@ -214,17 +258,33 @@ namespace MusicBeePlugin
 
             // open file into currPlaylists and currGenre
             // check if file exists
-            using (var stream = File.Create(dataPath + "/hotkeyOrg/currPlaylists.xml"))
+
+            if (File.Exists(dataPath + "/hotkeyOrg/currPlaylists.xml"))
             {
-                var serializer = new XmlSerializer(typeof(string[]));
-                currPlaylists = serializer.Deserialize(stream) as string[]; // will this work?
-                //serializer.Serialize(stream, currPlaylists);
+                using (var stream = new FileStream(dataPath + "/hotkeyOrg/currPlaylists.xml", FileMode.Open))
+                {
+                    var serializer = new XmlSerializer(typeof(string[]));
+                    currPlaylists = serializer.Deserialize(stream) as string[]; // will this work?
+                    //serializer.Serialize(stream, currPlaylists);
+                }
             }
-            using (var stream = File.Create(dataPath + "/hotkeyOrg/currGenres.xml"))
+            if (File.Exists(dataPath + "/hotkeyOrg/currGenres.xml"))
             {
-                var serializer = new XmlSerializer(typeof(string[]));
-                currGenres = serializer.Deserialize(stream) as string[]; // TODO: really will it?
+                using (var stream = new FileStream(dataPath + "/hotkeyOrg/currGenres.xml", FileMode.Open))
+                {
+                    var serializer = new XmlSerializer(typeof(string[]));
+                    currGenres = serializer.Deserialize(stream) as string[]; // TODO: really will it?
+                }
             }
+            if (File.Exists(dataPath + "/hotkeyOrg/currTags.xml"))
+            {
+                using (var stream = new FileStream(dataPath + "/hotkeyOrg/currTags.xml", FileMode.Open))
+                {
+                    var serializer = new XmlSerializer(typeof(string[]));
+                    currTags = serializer.Deserialize(stream) as string[]; // TODO: really will it?
+                }
+            }
+
         }
 
         private void GetAllPlaylists()
@@ -232,14 +292,19 @@ namespace MusicBeePlugin
             // list all playlists
             mbApiInterface.Playlist_QueryPlaylists();
             string file = "";
-            List<string> list = new List<string>();
-            file = mbApiInterface.Playlist_QueryGetNextPlaylist();
-            while (file != null)
-            {
-                list.Add(file);
-            }
-            playlistList = list.ToArray();
+            List<string> filesList = new List<string>();
+            List<string> namesList = new List<string>();
 
+            //file = mbApiInterface.Playlist_QueryGetNextPlaylist();
+            while ((file = mbApiInterface.Playlist_QueryGetNextPlaylist()) != null)
+            {
+                // TODO: check playlist type??
+                if (mbApiInterface.Playlist_GetType(file) == PlaylistFormat.Auto) { continue; }
+                filesList.Add(file);
+                namesList.Add(mbApiInterface.Playlist_GetName(file));
+            }
+            playlistList = filesList.ToArray();
+            playlistNames = namesList.ToArray();
             // list all genres???
 
         }
@@ -271,7 +336,7 @@ namespace MusicBeePlugin
 
         public void SetSinglePlaylist(int commandNum, int i)
         {
-            currGenres[commandNum] = genreList[i];
+            currPlaylists[commandNum] = playlistList[i];
         }
 
         private void AddToPlaylist(int commandNum)
