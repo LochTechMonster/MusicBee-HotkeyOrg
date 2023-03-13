@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MusicBeePlugin</RootNamespace>
-    <AssemblyName>mb_TestCSharpDll</AssemblyName>
+    <AssemblyName>mb_HotkeyOrg</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -89,7 +89,7 @@
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MusicBeeInterface.cs" />
-    <Compile Include="TestCSharpDll.cs" />
+    <Compile Include="HotkeyOrg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

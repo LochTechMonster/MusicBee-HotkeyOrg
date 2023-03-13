@@ -131,6 +131,12 @@ namespace MusicBeePlugin
                 case NotificationType.TrackChanged:
                     string filename = mbApiInterface.NowPlaying_GetFileUrl();
                     break;
+                //case NotificationType.PlaylistCreated:
+                //    break;
+                //case NotificationType.PlaylistUpdated:
+                //    break;
+                //case NotificationType.PlaylistDeleted:
+                //    break;
             }
         }
 
