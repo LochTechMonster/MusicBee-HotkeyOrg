@@ -14,6 +14,7 @@ namespace MusicBeePlugin
     {
         private MusicBeeApiInterface mbApiInterface;
         private PluginInfo about = new PluginInfo();
+        private ConfigForm configForm;
 
         public PluginInfo Initialise(IntPtr apiInterfacePtr)
         {
@@ -32,10 +33,8 @@ namespace MusicBeePlugin
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = (ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents);
             about.ConfigurationPanelHeight = 25;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
-            this.pluginForm = new Form1(this.mbApiInterface);
             GetSavedSettings();
             GetAllPlaylists();
-            createMenuItem();
             createCommands();
             return about;
         }
@@ -131,24 +130,8 @@ namespace MusicBeePlugin
                     break;
                 case NotificationType.TrackChanged:
                     string filename = mbApiInterface.NowPlaying_GetFileUrl();
-                    pluginForm.TrackChanged(filename);
                     break;
             }
-        }
-
-        private void createMenuItem() 
-        {
-            mbApiInterface.MB_AddMenuItem("mnuTools/Start My Plugin", "HotKey For Start My Plugin", menuClicked);
-        }
-
-        private void menuClicked(object sender, EventArgs e)
-        {
-            this.pluginForm.Show();
-        }
-
-        public PlayState getPlayerState()
-        {
-            return mbApiInterface.Player_GetPlayState();
         }
 
         private const int numCommands = 10;
@@ -165,9 +148,7 @@ namespace MusicBeePlugin
 
         private string[] playlistList;
         private string[] playlistNames;
-        private string[] currTags = new string[numCommands];
         private string[] currPlaylists = new string[numCommands];
-        private string[] currGenres = new string[numCommands];
         private void GetSavedSettings()
         {
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
@@ -181,27 +162,9 @@ namespace MusicBeePlugin
                 using (var stream = new FileStream(dataPath + "/hotkeyOrg/currPlaylists.xml", FileMode.Open))
                 {
                     var serializer = new XmlSerializer(typeof(string[]));
-                    currPlaylists = serializer.Deserialize(stream) as string[]; // will this work?
-                    //serializer.Serialize(stream, currPlaylists);
+                    currPlaylists = serializer.Deserialize(stream) as string[];
                 }
             }
-            if (File.Exists(dataPath + "/hotkeyOrg/currGenres.xml"))
-            {
-                using (var stream = new FileStream(dataPath + "/hotkeyOrg/currGenres.xml", FileMode.Open))
-                {
-                    var serializer = new XmlSerializer(typeof(string[]));
-                    currGenres = serializer.Deserialize(stream) as string[]; // TODO: really will it?
-                }
-            }
-            if (File.Exists(dataPath + "/hotkeyOrg/currTags.xml"))
-            {
-                using (var stream = new FileStream(dataPath + "/hotkeyOrg/currTags.xml", FileMode.Open))
-                {
-                    var serializer = new XmlSerializer(typeof(string[]));
-                    currTags = serializer.Deserialize(stream) as string[]; // TODO: really will it?
-                }
-            }
-
         }
 
         private void GetAllPlaylists()
@@ -303,8 +266,5 @@ namespace MusicBeePlugin
         //    e.Graphics.Clear(Color.Red);
         //    TextRenderer.DrawText(e.Graphics, "hello", SystemFonts.CaptionFont, new Point(10, 10), Color.Blue);
         //}
-
-        private Form1 pluginForm;
-        private ConfigForm configForm;
     }
 }
