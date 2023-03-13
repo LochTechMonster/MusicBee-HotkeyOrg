@@ -26,7 +26,7 @@ namespace MusicBeePlugin
             about.TargetApplication = "";   //  the name of a Plugin Storage device or panel header for a dockable panel
             about.Type = PluginType.General;
             about.VersionMajor = 0;  // your plugin version
-            about.VersionMinor = 2;
+            about.VersionMinor = 3;
             about.Revision = 1;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
@@ -42,7 +42,7 @@ namespace MusicBeePlugin
 
         private void OpenConfigForm()
         {
-            this.configForm = new ConfigForm(playlistList, playlistNames, currTags, currPlaylists, currGenres, this);
+            this.configForm = new ConfigForm(playlistList, playlistNames, currPlaylists, this);
             configForm.Show();
         }
 
@@ -83,15 +83,12 @@ namespace MusicBeePlugin
             // save any persistent settings in a sub-folder of this path
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
             Console.WriteLine(dataPath);
-            // TODO: check path exists
             if (!Directory.Exists(dataPath + "/hotkeyOrg/"))
             {
                 Directory.CreateDirectory(dataPath + "/hotkeyOrg/");
             }
 
             SavePlaylists();
-            SaveGenres();
-            SaveTags();
         }
 
         private void SavePlaylists()
@@ -101,26 +98,6 @@ namespace MusicBeePlugin
             {
                 var serializer = new XmlSerializer(typeof(string[]));
                 serializer.Serialize(stream, currPlaylists);
-            }
-        }
-
-        private void SaveGenres()
-        {
-            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
-            using (var stream = File.Create(dataPath + "/hotkeyOrg/currGenres.xml"))
-            {
-                var serializer = new XmlSerializer(typeof(string[]));
-                serializer.Serialize(stream, currGenres);
-            }
-        }
-
-        private void SaveTags()
-        {
-            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
-            using (var stream = File.Create(dataPath + "/hotkeyOrg/currTags.xml"))
-            {
-                var serializer = new XmlSerializer(typeof(string[]));
-                serializer.Serialize(stream, currTags);
             }
         }
 
@@ -144,8 +121,6 @@ namespace MusicBeePlugin
                 case NotificationType.PluginStartup:
                     // perform startup initialisation
                     
-
-
                     switch (mbApiInterface.Player_GetPlayState())
                     {
                         case PlayState.Playing:
@@ -155,24 +130,16 @@ namespace MusicBeePlugin
                     }
                     break;
                 case NotificationType.TrackChanged:
-                    //string artist = mbApiInterface.NowPlaying_GetFileTag(MetaDataType.Artist);
                     string filename = mbApiInterface.NowPlaying_GetFileUrl();
-                    // ...
                     pluginForm.TrackChanged(filename);
                     break;
             }
         }
 
-        
-
         private void createMenuItem() 
         {
             mbApiInterface.MB_AddMenuItem("mnuTools/Start My Plugin", "HotKey For Start My Plugin", menuClicked);
-            
-
         }
-
-        
 
         private void menuClicked(object sender, EventArgs e)
         {
@@ -184,70 +151,20 @@ namespace MusicBeePlugin
             return mbApiInterface.Player_GetPlayState();
         }
 
-
-        private int CommandLayer = 0;
-        private const int numLayers = 4;
         private const int numCommands = 10;
         private string np = "";
         private void createCommands()
         {
-            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 1", this.pluginForm.Command1);
-            mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Change Layer Up", this.ChangeCommandLayerUp);
-            mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Change Layer Down", this.ChangeCommandLayerDown);
-
-            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 2", new EventHandler((sender, e) => DoCommand(2)));
-            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 3", new EventHandler((sender, e) => DoCommand(3)));
-            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 4", new EventHandler((sender, e) => DoCommand(4)));
-            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 5", new EventHandler((sender, e) => DoCommand(5)));
-            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 6", new EventHandler((sender, e) => DoCommand(6)));
-            //mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command 7", new EventHandler((sender, e) => DoCommand(7)));
-
             for (int i = 1; i <= numCommands; i++)
             {
-                mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command " + i.ToString(), 
-                                                  new EventHandler((sender, e) => DoCommand(i-1)));
-            }
-        }
-
-        private void ChangeCommandLayerUp(object sender, EventArgs e)
-        {
-            CommandLayer++;
-            CommandLayer %= numLayers;
-        }
-
-        private void ChangeCommandLayerDown(object sender, EventArgs e)
-        {
-            CommandLayer--;
-            CommandLayer += numLayers; // to make the mod positive
-            CommandLayer %= numLayers;
-        }
-
-        private void DoCommand(int commandNum)
-        {
-            // Do something to make sure np is something
-            np = mbApiInterface.NowPlaying_GetFileUrl();
-            if (np == null || np == "") return; 
-
-            switch (CommandLayer)
-            {
-                case 0: // playlists
-                    AddToPlaylist(commandNum);
-                    break;
-                case 1: // genres
-                    AddGenre(commandNum);
-                    break; 
-                case 2: // tags
-                    AddTag(commandNum);
-                    break; 
-                case 3: // rating
-                    SetRating(commandNum);
-                    break;
+                int a = i;
+                mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command " + a.ToString(), 
+                                                  new EventHandler((sender, e) => AddToPlaylist(a-1)));
             }
         }
 
         private string[] playlistList;
         private string[] playlistNames;
-        private string[] genreList;
         private string[] currTags = new string[numCommands];
         private string[] currPlaylists = new string[numCommands];
         private string[] currGenres = new string[numCommands];
@@ -298,7 +215,6 @@ namespace MusicBeePlugin
             //file = mbApiInterface.Playlist_QueryGetNextPlaylist();
             while ((file = mbApiInterface.Playlist_QueryGetNextPlaylist()) != null)
             {
-                // TODO: check playlist type??
                 if (mbApiInterface.Playlist_GetType(file) == PlaylistFormat.Auto) { continue; }
                 filesList.Add(file);
                 namesList.Add(mbApiInterface.Playlist_GetName(file));
@@ -309,31 +225,6 @@ namespace MusicBeePlugin
 
         }
 
-        public void SetCurrentPlaylist(string[] list)
-        {
-            currPlaylists = list;
-        }
-
-        public void SetCurrentGenres(string[] list)
-        {
-            currGenres = list;
-        }
-
-        public void SetCurrentTags(string[] list)
-        {
-            currTags = list;
-        }
-
-        public void SetSingleGenre(int commandNum, int i)
-        {
-            currPlaylists[commandNum] = playlistList[i];
-        }
-
-        public void SetSingleGenre(int commandNum, string s)
-        {
-            currGenres[commandNum] = s;
-        }
-
         public void SetSinglePlaylist(int commandNum, int i)
         {
             currPlaylists[commandNum] = playlistList[i];
@@ -341,55 +232,15 @@ namespace MusicBeePlugin
 
         private void AddToPlaylist(int commandNum)
         {
-            //playlistUrl = playlistList[commandNum]
+            np = mbApiInterface.NowPlaying_GetFileUrl();
+            if (np == null || np == "") return;
             if (currPlaylists[commandNum] == "") return;
             if (!mbApiInterface.Playlist_IsInList(currPlaylists[commandNum], np))
             {
                 mbApiInterface.Playlist_AppendFiles(currPlaylists[commandNum], new string[] { np });
             }
-            // figure out something for removing from playlist maybe??
+            // TODO: figure out something for removing from playlist maybe??
 
-        }
-
-        private void AddGenre(int commandNum)
-        {
-            if (currGenres[commandNum] == "") return;
-            mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Genre, currGenres[commandNum]);
-        }
-
-        private void AddTag(int commandNum)
-        {
-            // What is this meant to 
-            // Append to comment if it isn't already there
-            if (currTags[commandNum] == "") return;
-
-            string cmt = mbApiInterface.Library_GetFileTag(np, Plugin.MetaDataType.Comment);
-            string tag = currTags[commandNum];
-
-            // check if comment is empty
-            if (cmt == "")
-            {
-                mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Comment, tag);
-                return;
-            }
-
-            // check if tag is in comment
-            if (cmt.Contains(tag)) return;
-            // TODO: figure out when to remove tags
-
-            // check if last character is a space
-            // if not, add one (unless start of comment)
-            if (!cmt.EndsWith(" ")) cmt += " ";
-
-            // append tag
-            cmt += tag;
-            mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Comment, cmt);
-
-        }
-
-        private void SetRating(int commandNum)
-        {
-            mbApiInterface.Library_SetFileTag(np, Plugin.MetaDataType.Rating, (commandNum / 2).ToString());
         }
 
         // return an array of lyric or artwork provider names this plugin supports
@@ -420,6 +271,7 @@ namespace MusicBeePlugin
         //  you can add your own controls to the panel if needed
         //  you can control the scrollable area of the panel using the mbApiInterface.MB_SetPanelScrollableArea function
         //  to set a MusicBee header for the panel, set about.TargetApplication in the Initialise function above to the panel header text
+        // TODO: Test this maybe
         //public int OnDockablePanelCreated(Control panel)
         //{
         //  //    return the height of the panel and perform any initialisation here
@@ -445,6 +297,7 @@ namespace MusicBeePlugin
         //    return list;
         //}
 
+        // TODO: idk what this is
         //private void panel_Paint(object sender, PaintEventArgs e)
         //{
         //    e.Graphics.Clear(Color.Red);
