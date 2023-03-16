@@ -33,7 +33,7 @@ namespace MusicBeePlugin
             about.TargetApplication = "";   //  the name of a Plugin Storage device or panel header for a dockable panel
             about.Type = PluginType.General;
             about.VersionMajor = 0;  // your plugin version
-            about.VersionMinor = 3;
+            about.VersionMinor = 4;
             about.Revision = 1;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
