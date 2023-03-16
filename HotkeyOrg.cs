@@ -12,6 +12,12 @@ namespace MusicBeePlugin
 {
     public partial class Plugin
     {
+        public enum Layer
+        {
+            Playlist = 0,
+            Genre = 1
+        }
+
         private MusicBeeApiInterface mbApiInterface;
         private PluginInfo about = new PluginInfo();
         private ConfigForm configForm;
@@ -33,7 +39,7 @@ namespace MusicBeePlugin
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = (ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents);
             about.ConfigurationPanelHeight = 25;   // height in pixels that musicbee should reserve in a panel for config settings. When set, a handle to an empty panel will be passed to the Configure function
-            GetSavedSettings();
+            LoadSavedSettings();
             GetAllPlaylists();
             createCommands();
             return about;
@@ -41,7 +47,8 @@ namespace MusicBeePlugin
 
         private void OpenConfigForm()
         {
-            this.configForm = new ConfigForm(playlistList, playlistNames, currPlaylists, this);
+            this.configForm = new ConfigForm(playlistList, playlistNames, currPlaylists, 
+                                             currGenres, this);
             configForm.Show();
         }
 
@@ -88,6 +95,7 @@ namespace MusicBeePlugin
             }
 
             SavePlaylists();
+            SaveGenres();
         }
 
         private void SavePlaylists()
@@ -99,6 +107,17 @@ namespace MusicBeePlugin
                 serializer.Serialize(stream, currPlaylists);
             }
         }
+
+        private void SaveGenres()
+        {
+            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
+            using (var stream = File.Create(dataPath + "/hotkeyOrg/currGenres.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(string[]));
+                serializer.Serialize(stream, currGenres);
+            }
+        }
+
 
         // MusicBee is closing the plugin (plugin is being disabled by user or MusicBee is shutting down)
         public void Close(PluginCloseReason reason)
@@ -142,20 +161,40 @@ namespace MusicBeePlugin
 
         private const int numCommands = 10;
         private string np = "";
+        private Layer layer = Layer.Playlist;
         private void createCommands()
         {
+            mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Set layer playlists",
+                                              new EventHandler((sender, e) => layer = Layer.Playlist));
+            mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Set layer genres",
+                                              new EventHandler((sender, e) => layer = Layer.Genre));
+
             for (int i = 1; i <= numCommands; i++)
             {
                 int a = i;
                 mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Command " + a.ToString(), 
-                                                  new EventHandler((sender, e) => AddToPlaylist(a-1)));
+                                                  new EventHandler((sender, e) => DoCommand(a-1)));
+            }
+        }
+
+        private void DoCommand(int commandNum)
+        {
+            switch(layer)
+            {
+                case Layer.Playlist:
+                    AddToPlaylist(commandNum); 
+                    break;
+                case Layer.Genre:
+                    AddToGenre(commandNum);
+                    break;
             }
         }
 
         private string[] playlistList;
         private string[] playlistNames;
         private string[] currPlaylists = new string[numCommands];
-        private void GetSavedSettings()
+        private string[] currGenres = new string[numCommands];
+        private void LoadSavedSettings()
         {
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
             Console.WriteLine(dataPath);
@@ -171,6 +210,15 @@ namespace MusicBeePlugin
                     currPlaylists = serializer.Deserialize(stream) as string[];
                 }
             }
+
+            if (File.Exists(dataPath + "/hotkeyOrg/currGenres.xml"))
+            {
+                using (var stream = new FileStream(dataPath + "/hotkeyOrg/currGenres.xml", FileMode.Open))
+                {
+                    var serializer = new XmlSerializer(typeof(string[]));
+                    currGenres = serializer.Deserialize(stream) as string[];
+                }
+            }
         }
 
         private void GetAllPlaylists()
@@ -181,7 +229,6 @@ namespace MusicBeePlugin
             List<string> filesList = new List<string>();
             List<string> namesList = new List<string>();
 
-            //file = mbApiInterface.Playlist_QueryGetNextPlaylist();
             while ((file = mbApiInterface.Playlist_QueryGetNextPlaylist()) != null)
             {
                 if (mbApiInterface.Playlist_GetType(file) == PlaylistFormat.Auto) { continue; }
@@ -190,13 +237,17 @@ namespace MusicBeePlugin
             }
             playlistList = filesList.ToArray();
             playlistNames = namesList.ToArray();
-            // list all genres???
 
         }
 
         public void SetSinglePlaylist(int commandNum, int i)
         {
             currPlaylists[commandNum] = playlistList[i];
+        }
+
+        public void SetSelectedGenres(string[] genres)
+        {
+            currGenres = genres;
         }
 
         private void AddToPlaylist(int commandNum)
@@ -210,6 +261,17 @@ namespace MusicBeePlugin
             }
             // TODO: figure out something for removing from playlist maybe??
 
+        }
+
+        // sets genre of current song
+        private void AddToGenre(int commandNum)
+        {
+            np = mbApiInterface.NowPlaying_GetFileUrl();
+            if (np == null || np == "") return;
+            if (currGenres[commandNum] == "") return;
+
+            mbApiInterface.Library_SetFileTag(np, MetaDataType.Genre, currGenres[commandNum]);
+            mbApiInterface.Library_CommitTagsToFile(np);
         }
 
         // return an array of lyric or artwork provider names this plugin supports

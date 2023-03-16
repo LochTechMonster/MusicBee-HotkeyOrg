@@ -50,17 +50,41 @@
             this.label2 = new System.Windows.Forms.Label();
             this.playlistBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.genreTab = new System.Windows.Forms.TabPage();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.genreBox1 = new System.Windows.Forms.TextBox();
+            this.genreBox2 = new System.Windows.Forms.TextBox();
+            this.genreBox4 = new System.Windows.Forms.TextBox();
+            this.genreBox3 = new System.Windows.Forms.TextBox();
+            this.genreBox5 = new System.Windows.Forms.TextBox();
+            this.genreBox10 = new System.Windows.Forms.TextBox();
+            this.genreBox9 = new System.Windows.Forms.TextBox();
+            this.genreBox8 = new System.Windows.Forms.TextBox();
+            this.genreBox7 = new System.Windows.Forms.TextBox();
+            this.genreBox6 = new System.Windows.Forms.TextBox();
+            this.updateGenreButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.playlistTab.SuspendLayout();
+            this.genreTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.playlistTab);
+            this.tabControl.Controls.Add(this.genreTab);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(494, 247);
+            this.tabControl.Size = new System.Drawing.Size(511, 262);
             this.tabControl.TabIndex = 0;
             // 
             // playlistTab
@@ -263,6 +287,206 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Playlist 1";
             // 
+            // genreTab
+            // 
+            this.genreTab.Controls.Add(this.updateGenreButton);
+            this.genreTab.Controls.Add(this.genreBox10);
+            this.genreTab.Controls.Add(this.genreBox9);
+            this.genreTab.Controls.Add(this.genreBox8);
+            this.genreTab.Controls.Add(this.genreBox7);
+            this.genreTab.Controls.Add(this.genreBox6);
+            this.genreTab.Controls.Add(this.genreBox5);
+            this.genreTab.Controls.Add(this.genreBox4);
+            this.genreTab.Controls.Add(this.genreBox3);
+            this.genreTab.Controls.Add(this.genreBox2);
+            this.genreTab.Controls.Add(this.genreBox1);
+            this.genreTab.Controls.Add(this.label11);
+            this.genreTab.Controls.Add(this.label12);
+            this.genreTab.Controls.Add(this.label13);
+            this.genreTab.Controls.Add(this.label14);
+            this.genreTab.Controls.Add(this.label15);
+            this.genreTab.Controls.Add(this.label16);
+            this.genreTab.Controls.Add(this.label17);
+            this.genreTab.Controls.Add(this.label18);
+            this.genreTab.Controls.Add(this.label19);
+            this.genreTab.Controls.Add(this.label20);
+            this.genreTab.Location = new System.Drawing.Point(4, 22);
+            this.genreTab.Name = "genreTab";
+            this.genreTab.Size = new System.Drawing.Size(503, 236);
+            this.genreTab.TabIndex = 1;
+            this.genreTab.Text = "Genres";
+            this.genreTab.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(257, 157);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(51, 13);
+            this.label11.TabIndex = 39;
+            this.label11.Text = "Genre 10";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(257, 130);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(45, 13);
+            this.label12.TabIndex = 37;
+            this.label12.Text = "Genre 9";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(257, 103);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(45, 13);
+            this.label13.TabIndex = 35;
+            this.label13.Text = "Genre 8";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(257, 76);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(45, 13);
+            this.label14.TabIndex = 33;
+            this.label14.Text = "Genre 7";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(257, 49);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(45, 13);
+            this.label15.TabIndex = 31;
+            this.label15.Text = "Genre 6";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(43, 157);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(45, 13);
+            this.label16.TabIndex = 29;
+            this.label16.Text = "Genre 5";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(43, 130);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(45, 13);
+            this.label17.TabIndex = 27;
+            this.label17.Text = "Genre 4";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(43, 103);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(45, 13);
+            this.label18.TabIndex = 25;
+            this.label18.Text = "Genre 3";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(43, 76);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(45, 13);
+            this.label19.TabIndex = 23;
+            this.label19.Text = "Genre 2";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(43, 49);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(45, 13);
+            this.label20.TabIndex = 21;
+            this.label20.Text = "Genre 1";
+            // 
+            // genreBox1
+            // 
+            this.genreBox1.Location = new System.Drawing.Point(108, 47);
+            this.genreBox1.Name = "genreBox1";
+            this.genreBox1.Size = new System.Drawing.Size(121, 20);
+            this.genreBox1.TabIndex = 41;
+            // 
+            // genreBox2
+            // 
+            this.genreBox2.Location = new System.Drawing.Point(108, 74);
+            this.genreBox2.Name = "genreBox2";
+            this.genreBox2.Size = new System.Drawing.Size(121, 20);
+            this.genreBox2.TabIndex = 42;
+            // 
+            // genreBox4
+            // 
+            this.genreBox4.Location = new System.Drawing.Point(108, 128);
+            this.genreBox4.Name = "genreBox4";
+            this.genreBox4.Size = new System.Drawing.Size(121, 20);
+            this.genreBox4.TabIndex = 44;
+            // 
+            // genreBox3
+            // 
+            this.genreBox3.Location = new System.Drawing.Point(108, 101);
+            this.genreBox3.Name = "genreBox3";
+            this.genreBox3.Size = new System.Drawing.Size(121, 20);
+            this.genreBox3.TabIndex = 43;
+            // 
+            // genreBox5
+            // 
+            this.genreBox5.Location = new System.Drawing.Point(108, 155);
+            this.genreBox5.Name = "genreBox5";
+            this.genreBox5.Size = new System.Drawing.Size(121, 20);
+            this.genreBox5.TabIndex = 45;
+            // 
+            // genreBox10
+            // 
+            this.genreBox10.Location = new System.Drawing.Point(321, 155);
+            this.genreBox10.Name = "genreBox10";
+            this.genreBox10.Size = new System.Drawing.Size(121, 20);
+            this.genreBox10.TabIndex = 50;
+            // 
+            // genreBox9
+            // 
+            this.genreBox9.Location = new System.Drawing.Point(321, 128);
+            this.genreBox9.Name = "genreBox9";
+            this.genreBox9.Size = new System.Drawing.Size(121, 20);
+            this.genreBox9.TabIndex = 49;
+            // 
+            // genreBox8
+            // 
+            this.genreBox8.Location = new System.Drawing.Point(321, 101);
+            this.genreBox8.Name = "genreBox8";
+            this.genreBox8.Size = new System.Drawing.Size(121, 20);
+            this.genreBox8.TabIndex = 48;
+            // 
+            // genreBox7
+            // 
+            this.genreBox7.Location = new System.Drawing.Point(321, 74);
+            this.genreBox7.Name = "genreBox7";
+            this.genreBox7.Size = new System.Drawing.Size(121, 20);
+            this.genreBox7.TabIndex = 47;
+            // 
+            // genreBox6
+            // 
+            this.genreBox6.Location = new System.Drawing.Point(321, 47);
+            this.genreBox6.Name = "genreBox6";
+            this.genreBox6.Size = new System.Drawing.Size(121, 20);
+            this.genreBox6.TabIndex = 46;
+            // 
+            // updateGenreButton
+            // 
+            this.updateGenreButton.Location = new System.Drawing.Point(341, 181);
+            this.updateGenreButton.Name = "updateGenreButton";
+            this.updateGenreButton.Size = new System.Drawing.Size(101, 37);
+            this.updateGenreButton.TabIndex = 51;
+            this.updateGenreButton.Text = "Update Genres";
+            this.updateGenreButton.UseVisualStyleBackColor = true;
+            this.updateGenreButton.Click += new System.EventHandler(this.updateGenreButton_Click);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -274,6 +498,8 @@
             this.tabControl.ResumeLayout(false);
             this.playlistTab.ResumeLayout(false);
             this.playlistTab.PerformLayout();
+            this.genreTab.ResumeLayout(false);
+            this.genreTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -302,5 +528,27 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox playlistBox2;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TabPage genreTab;
+        private System.Windows.Forms.TextBox genreBox10;
+        private System.Windows.Forms.TextBox genreBox9;
+        private System.Windows.Forms.TextBox genreBox8;
+        private System.Windows.Forms.TextBox genreBox7;
+        private System.Windows.Forms.TextBox genreBox6;
+        private System.Windows.Forms.TextBox genreBox5;
+        private System.Windows.Forms.TextBox genreBox4;
+        private System.Windows.Forms.TextBox genreBox3;
+        private System.Windows.Forms.TextBox genreBox2;
+        private System.Windows.Forms.TextBox genreBox1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Button updateGenreButton;
     }
 }
