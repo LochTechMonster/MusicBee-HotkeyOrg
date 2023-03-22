@@ -14,10 +14,12 @@ namespace MusicBeePlugin
     public partial class ConfigForm : Form
     {
         private ComboBox[] playlistBoxes;
+        private TextBox[] genreBoxes;
 
         private Plugin parent;
         private string[] playlists;
-        public ConfigForm(string[] playlists, string[] playlistNames, string[] selectedPlaylists, Plugin parent)
+        public ConfigForm(string[] playlists, string[] playlistNames, string[] selectedPlaylists, 
+                          string[] selectedGenres, Plugin parent)
         {
             InitializeComponent();
             playlistBoxes = new ComboBox[]
@@ -28,19 +30,27 @@ namespace MusicBeePlugin
                 playlistBox10
             };
 
+            genreBoxes = new TextBox[]
+            {
+                genreBox1, genreBox2, genreBox3,
+                genreBox4, genreBox5, genreBox6,
+                genreBox7, genreBox8, genreBox9,
+                genreBox10
+            };
+
             this.playlists = playlists;
 
             // give all playlists and genres
             // apply selected playlists and genres
             for (int i = 0; i < 10;  i++)
             {
-                // TODO: Sort out playlist names and playlist file
                 int a = i;
                 playlistBoxes[i].Items.AddRange(playlistNames);
                 playlistBoxes[i].SelectedIndex = numInPlaylists(selectedPlaylists[i]);
                 playlistBoxes[i].SelectedIndexChanged += new EventHandler((sender, e) => 
                                                           PlaylistBox_SelectedIndexChanged(sender, e, a));
 
+                genreBoxes[i].Text = selectedGenres[i];
             }
             this.parent = parent;
 
@@ -59,5 +69,16 @@ namespace MusicBeePlugin
             parent.SetSinglePlaylist(num, playlistBoxes[num].SelectedIndex);
         }
 
+        private void updateGenreButton_Click(object sender, EventArgs e)
+        {
+            // update config in main
+            List<string> genreNames = new List<string>();
+            for (int i = 0; i < genreBoxes.Length; i++)
+            {
+                genreNames.Add(genreBoxes[i].Text.Trim());
+            }
+
+            parent.SetSelectedGenres(genreNames.ToArray());
+        }
     }
 }
