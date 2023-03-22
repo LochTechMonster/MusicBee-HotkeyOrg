@@ -202,6 +202,9 @@ namespace MusicBeePlugin
                 case Layer.Genre:
                     AddToGenre(commandNum);
                     break;
+                case Layer.Tag:
+                    AddTag(commandNum);
+                    break;
             }
         }
 
@@ -242,7 +245,7 @@ namespace MusicBeePlugin
                 using (var stream = new FileStream(dataPath + "/hotkeyOrg/currTags.xml", FileMode.Open))
                 {
                     var serializer = new XmlSerializer(typeof(string[]));
-                    currGenres = serializer.Deserialize(stream) as string[];
+                    currTags = serializer.Deserialize(stream) as string[];
                 }
             }
         }
@@ -309,9 +312,23 @@ namespace MusicBeePlugin
         {
             np = mbApiInterface.NowPlaying_GetFileUrl();
             if (np == null || np == "") return;
-            if (currTags[commandNum] == "") return;
+            string tag = currTags[commandNum];
+            if (tag == "") return;
 
             // stuff to append the tag and check it isn't already there
+            string cmt = mbApiInterface.Library_GetFileTag(np, MetaDataType.Comment);
+            if (cmt == "")
+            {
+                mbApiInterface.Library_SetFileTag(np, MetaDataType.Comment, tag);
+            } else
+            {
+                if (cmt.Contains(tag)) return;
+                if (!cmt.EndsWith(" ")) cmt += " ";
+                cmt += tag;
+                mbApiInterface.Library_SetFileTag(np, MetaDataType.Comment, cmt);
+            }
+
+
             mbApiInterface.Library_CommitTagsToFile(np);
         }
 
