@@ -44,7 +44,6 @@ namespace MusicBeePlugin
             // apply selected playlists and genres
             for (int i = 0; i < 10;  i++)
             {
-                // TODO: Sort out playlist names and playlist file
                 int a = i;
                 playlistBoxes[i].Items.AddRange(playlistNames);
                 playlistBoxes[i].SelectedIndex = numInPlaylists(selectedPlaylists[i]);
