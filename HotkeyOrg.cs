@@ -49,7 +49,7 @@ namespace MusicBeePlugin
         private void OpenConfigForm()
         {
             this.configForm = new ConfigForm(playlistList, playlistNames, currPlaylists, 
-                                             currGenres, this);
+                                             currGenres, currTags, this);
             configForm.Show();
         }
 

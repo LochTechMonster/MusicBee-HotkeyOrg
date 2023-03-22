@@ -15,11 +15,12 @@ namespace MusicBeePlugin
     {
         private ComboBox[] playlistBoxes;
         private TextBox[] genreBoxes;
+        private TextBox[] tagBoxes;
 
         private Plugin parent;
         private string[] playlists;
         public ConfigForm(string[] playlists, string[] playlistNames, string[] selectedPlaylists, 
-                          string[] selectedGenres, Plugin parent)
+                          string[] selectedGenres, string[] selectedTags, Plugin parent)
         {
             InitializeComponent();
             playlistBoxes = new ComboBox[]
@@ -38,6 +39,14 @@ namespace MusicBeePlugin
                 genreBox10
             };
 
+            tagBoxes = new TextBox[]
+            {
+                tagBox1, tagBox2, tagBox3,
+                tagBox4, tagBox5, tagBox6,
+                tagBox7, tagBox8, tagBox9,
+                tagBox10
+            };
+
             this.playlists = playlists;
 
             // give all playlists and genres
@@ -51,6 +60,8 @@ namespace MusicBeePlugin
                                                           PlaylistBox_SelectedIndexChanged(sender, e, a));
 
                 genreBoxes[i].Text = selectedGenres[i];
+
+                tagBoxes[i].Text = selectedTags[i];
             }
             this.parent = parent;
 
@@ -79,6 +90,18 @@ namespace MusicBeePlugin
             }
 
             parent.SetSelectedGenres(genreNames.ToArray());
+        }
+
+        private void updateTabButton_Click(object sender, EventArgs e)
+        {
+            // update config in main
+            List<string> tagNames = new List<string>();
+            for (int i = 0; i < tagBoxes.Length; i++)
+            {
+                tagNames.Add(tagBoxes[i].Text.Trim());
+            }
+
+            parent.SetSelectedTags(tagNames.ToArray());
         }
     }
 }
