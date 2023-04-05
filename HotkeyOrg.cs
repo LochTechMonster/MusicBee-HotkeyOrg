@@ -33,8 +33,8 @@ namespace MusicBeePlugin
             about.Author = "LochTech";
             about.TargetApplication = "";   //  the name of a Plugin Storage device or panel header for a dockable panel
             about.Type = PluginType.General;
-            about.VersionMajor = 0;  // your plugin version
-            about.VersionMinor = 5;
+            about.VersionMajor = 1;  // your plugin version
+            about.VersionMinor = 0;
             about.Revision = 1;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
