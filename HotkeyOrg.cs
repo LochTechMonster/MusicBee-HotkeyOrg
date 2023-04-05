@@ -15,7 +15,8 @@ namespace MusicBeePlugin
         public enum Layer
         {
             Playlist = 0,
-            Genre = 1
+            Genre = 1,
+            Tag = 2
         }
 
         private MusicBeeApiInterface mbApiInterface;
@@ -32,8 +33,8 @@ namespace MusicBeePlugin
             about.Author = "LochTech";
             about.TargetApplication = "";   //  the name of a Plugin Storage device or panel header for a dockable panel
             about.Type = PluginType.General;
-            about.VersionMajor = 0;  // your plugin version
-            about.VersionMinor = 4;
+            about.VersionMajor = 1;  // your plugin version
+            about.VersionMinor = 0;
             about.Revision = 1;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
@@ -48,7 +49,7 @@ namespace MusicBeePlugin
         private void OpenConfigForm()
         {
             this.configForm = new ConfigForm(playlistList, playlistNames, currPlaylists, 
-                                             currGenres, this);
+                                             currGenres, currTags, this);
             configForm.Show();
         }
 
@@ -96,6 +97,7 @@ namespace MusicBeePlugin
 
             SavePlaylists();
             SaveGenres();
+            SaveTags();
         }
 
         private void SavePlaylists()
@@ -115,6 +117,16 @@ namespace MusicBeePlugin
             {
                 var serializer = new XmlSerializer(typeof(string[]));
                 serializer.Serialize(stream, currGenres);
+            }
+        }
+
+        private void SaveTags()
+        {
+            string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
+            using (var stream = File.Create(dataPath + "/hotkeyOrg/currTags.xml"))
+            {
+                var serializer = new XmlSerializer(typeof(string[]));
+                serializer.Serialize(stream, currTags);
             }
         }
 
@@ -148,6 +160,7 @@ namespace MusicBeePlugin
                     }
                     break;
                 case NotificationType.TrackChanged:
+                    // TODO: check
                     string filename = mbApiInterface.NowPlaying_GetFileUrl();
                     break;
                 //case NotificationType.PlaylistCreated:
@@ -168,6 +181,8 @@ namespace MusicBeePlugin
                                               new EventHandler((sender, e) => layer = Layer.Playlist));
             mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Set layer genres",
                                               new EventHandler((sender, e) => layer = Layer.Genre));
+            mbApiInterface.MB_RegisterCommand("HotkeyOrganiser: Set layer tags",
+                                              new EventHandler((sender, e) => layer = Layer.Tag));
 
             for (int i = 1; i <= numCommands; i++)
             {
@@ -187,6 +202,9 @@ namespace MusicBeePlugin
                 case Layer.Genre:
                     AddToGenre(commandNum);
                     break;
+                case Layer.Tag:
+                    AddTag(commandNum);
+                    break;
             }
         }
 
@@ -194,6 +212,8 @@ namespace MusicBeePlugin
         private string[] playlistNames;
         private string[] currPlaylists = new string[numCommands];
         private string[] currGenres = new string[numCommands];
+        private string[] currTags = new string[numCommands];
+
         private void LoadSavedSettings()
         {
             string dataPath = mbApiInterface.Setting_GetPersistentStoragePath();
@@ -217,6 +237,15 @@ namespace MusicBeePlugin
                 {
                     var serializer = new XmlSerializer(typeof(string[]));
                     currGenres = serializer.Deserialize(stream) as string[];
+                }
+            }
+
+            if (File.Exists(dataPath + "/hotkeyOrg/currTags.xml"))
+            {
+                using (var stream = new FileStream(dataPath + "/hotkeyOrg/currTags.xml", FileMode.Open))
+                {
+                    var serializer = new XmlSerializer(typeof(string[]));
+                    currTags = serializer.Deserialize(stream) as string[];
                 }
             }
         }
@@ -250,6 +279,11 @@ namespace MusicBeePlugin
             currGenres = genres;
         }
 
+        public void SetSelectedTags(string[] tags)
+        {
+            currTags = tags;
+        }
+
         private void AddToPlaylist(int commandNum)
         {
             np = mbApiInterface.NowPlaying_GetFileUrl();
@@ -271,6 +305,30 @@ namespace MusicBeePlugin
             if (currGenres[commandNum] == "") return;
 
             mbApiInterface.Library_SetFileTag(np, MetaDataType.Genre, currGenres[commandNum]);
+            mbApiInterface.Library_CommitTagsToFile(np);
+        }
+
+        private void AddTag(int commandNum)
+        {
+            np = mbApiInterface.NowPlaying_GetFileUrl();
+            if (np == null || np == "") return;
+            string tag = currTags[commandNum];
+            if (tag == "") return;
+
+            // stuff to append the tag and check it isn't already there
+            string cmt = mbApiInterface.Library_GetFileTag(np, MetaDataType.Comment);
+            if (cmt == "")
+            {
+                mbApiInterface.Library_SetFileTag(np, MetaDataType.Comment, tag);
+            } else
+            {
+                if (cmt.Contains(tag)) return;
+                if (!cmt.EndsWith(" ")) cmt += " ";
+                cmt += tag;
+                mbApiInterface.Library_SetFileTag(np, MetaDataType.Comment, cmt);
+            }
+
+
             mbApiInterface.Library_CommitTagsToFile(np);
         }
 
